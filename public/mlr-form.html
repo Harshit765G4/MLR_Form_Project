@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Medical Legal Report Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f0f8ff;
+    }
+    .form-container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 40px;
+    }
+    h3, h5 {
+      color: #007bff;
+    }
+    .form-label {
+      font-weight: 500;
+    }
+    .table thead {
+      background-color: #e6f0fa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h3 class="text-center mb-4"><i class="bi bi-clipboard2-plus"></i> Medical Legal Report Form</h3>
+      <form id="mlrForm" action="/submit-mlr" method="POST">
+        
+        <h5><i class="bi bi-person-vcard"></i> Doctor(s) Details</h5>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Sr No.</th>
+              <th>Doctor's Name</th>
+              <th>Designation</th>
+              <th>Registration ID</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="doctorTable">
+            <tr>
+              <td>1</td>
+              <td><input name="doctorName1" class="form-control" required placeholder="Enter doctor's name"></td>
+              <td><input name="designation1" class="form-control" placeholder="Enter designation"></td>
+              <td>
+                <input name="registrationNo1" class="form-control" placeholder="Enter registration no." 
+                       pattern="^\d{1,4}$" title="Enter a number up to 4 digits" required maxlength="4" inputmode="numeric">
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-outline-success btn-sm mb-3" onclick="addDoctorRow()">
+          <i class="bi bi-plus-circle"></i> Add Doctor Row
+        </button>
+
+        <h5><i class="bi bi-clipboard-heart"></i> Patient Consent</h5>
+        <div class="mb-3">
+          I 
+          <input type="text" id="patientName" name="patientName" class="form-control d-inline w-25" required placeholder="Patient name"> 
+          son/daughter of 
+          <input type="text" id="fatherName" name="fatherName" class="form-control d-inline w-25" required placeholder="Father's name">
+          with voluntary and own free will give my consent for medical examination. In this regard I have not been medically examined earlier. I have been made to understand the purpose, process, result and gains of this examination. This examination can go in my favour or against me.
+        </div>
+
+        <h5><i class="bi bi-person-lines-fill"></i> Personal Details</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Title (Sh./Smt./Miss) *</label>
+            <input name="title" class="form-control" required placeholder="e.g. Sh./Smt./Miss">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Relative's Name (S/o, D/o, W/o) *</label>
+            <input name="relativeName" class="form-control" required placeholder="Enter relative's name">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Age *</label>
+            <input name="age" type="number" class="form-control" required placeholder="Enter age">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Religion/Caste</label>
+            <input name="religion" class="form-control" placeholder="Enter religion or caste">
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label" for="gender">Gender *</label>
+            <select id="gender" name="gender" class="form-select" required>
+              <option value="">-- Select --</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label" for="maritalStatus">Marital Status *</label>
+            <select id="maritalStatus" name="maritalStatus" class="form-select" required>
+              <option value="">-- Select --</option>
+              <option>Single</option>
+              <option>Married</option>
+              <option>Widowed</option>
+            </select>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Date *</label>
+            <input type="date" name="date" class="form-control" required placeholder="Select date" title="Select the date">
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary mt-3 px-4">
+            <i class="bi bi-check-circle"></i> Submit Report
+          </button>
+          <button type="button" class="btn btn-secondary mt-3 px-4 ms-2" onclick="resetForm()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset Form
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Dynamic Row Script -->
+  <script>
+    let doctorRowCount = 1;
+
+    function addDoctorRow() {
+      doctorRowCount++;
+      const table = document.getElementById('doctorTable');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>${doctorRowCount}</td>
+        <td><input name="doctorName${doctorRowCount}" class="form-control" required placeholder="Enter doctor's name"></td>
+        <td><input name="designation${doctorRowCount}" class="form-control" placeholder="Enter designation"></td>
+        <td><input name="registrationNo${doctorRowCount}" class="form-control" placeholder="Enter registration no." 
+                   pattern="^\\d{1,4}$" title="Enter a number up to 4 digits" required maxlength="4" inputmode="numeric"></td>
+        <td><button type="button" class="btn btn-sm btn-danger" onclick="deleteRow(this)"><i class="bi bi-trash"></i></button></td>
+      `;
+      table.appendChild(newRow);
+      updateRowNumbers();
+    }
+
+    function deleteRow(button) {
+      const row = button.closest('tr');
+      const table = document.getElementById('doctorTable');
+      if (table.rows.length > 1) {
+        row.remove();
+        updateRowNumbers();
+      }
+    }
+
+    function updateRowNumbers() {
+      const rows = document.querySelectorAll('#doctorTable tr');
+      rows.forEach((row, index) => {
+        row.cells[0].innerText = index + 1;
+      });
+      doctorRowCount = rows.length;
+    }
+
+    function resetForm() {
+      document.getElementById("mlrForm").reset();
+
+      // Remove all doctor rows except the first one
+      const table = document.getElementById('doctorTable');
+      while (table.rows.length > 1) {
+        table.deleteRow(1);
+      }
+
+      // Reset first row inputs
+      const firstRowInputs = table.querySelectorAll('tr:first-child input');
+      firstRowInputs.forEach(input => input.value = '');
+
+      updateRowNumbers();
+    }
+  </script>
+</body>
+</html>
